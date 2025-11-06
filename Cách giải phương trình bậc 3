@@ -1,109 +1,49 @@
-# iq_quiz.py
-# ---------------------------------
-# Mini IQ Quiz – Console Edition
-# ---------------------------------
-import textwrap
-import random
-import sys
+import numpy as np
 
-questions = [
-    {
-        "q": "Điền số còn thiếu: 3  7  15  31  63  __",
-        "choices": ["A. 95", "B. 115", "C. 127", "D. 129"],
-        "ans": "C"
-    },
-    {
-        "q": "Chim : Bay :: Cá : ____",
-        "choices": ["A. Nước", "B. Vây", "C. Bơi", "D. Lặn"],
-        "ans": "C"
-    },
-    {
-        "q": "Ma trận 3×3 (chọn ?)\n  2 4 6\n  3 5 7\n  4 6 ?",
-        "choices": ["A. 8", "B. 9", "C. 7", "D. 10"],
-        "ans": "A"
-    },
-    {
-        "q": "Khối lập phương 6 mặt (4 trắng, 1 đỏ, 1 xanh – hai mặt màu KHÔNG đối diện).\nCó bao nhiêu cặp mặt trắng đối diện?",
-        "choices": ["A. 0", "B. 1", "C. 2", "D. 3"],
-        "ans": "C"
-    },
-    {
-        "q": "Ba phát biểu:\n(1) Nếu tuyết rơi thì trời lạnh.\n(2) Trời lạnh.\n(3) Vậy tuyết đang rơi.\nPhát biểu (3) là?",
-        "choices": ["A. Đúng chắc chắn", "B. Sai chắc chắn", "C. Đúng hoặc sai tùy lúc", "D. Thiếu dữ kiện"],
-        "ans": "B"
-    },
-    {
-        "q": "Kim phút di chuyển 150° tương đương bao nhiêu phút?",
-        "choices": ["A. 15", "B. 25", "C. 30", "D. 45"],
-        "ans": "D"
-    },
-    {
-        "q": "Điền chữ còn thiếu:  A  D  G  J  __",
-        "choices": ["A. K", "B. L", "C. M", "D. N"],
-        "ans": "B"
-    },
-    {
-        "q": "Giả sử ♦ = (x − y)², ♥ = x + y.\nNếu x = 5, y = 2, giá trị của ♦ − ♥ là?",
-        "choices": ["A. 2", "B. 4", "C. 5", "D. 7"],
-        "ans": "C"
-    },
-    {
-        "q": "Chọn từ khác nhóm:",
-        "choices": ["A. Vuông", "B. Tròn", "C. Tam giác", "D. Cube"],
-        "ans": "D"
-    },
-    {
-        "q": "Có 4 quân domino (1|2) (2|3) (3|4) (4|1).\nCó thể xếp thành vòng khép kín hoàn hảo không?",
-        "choices": ["A. Có", "B. Không", "C. Chỉ 1 cách duy nhất", "D. Có >1 cách"],
-        "ans": "A"
-    }
-]
-
-def ask_question(idx, qinfo):
-    """In câu hỏi, nhận đáp án, trả True/False tùy đúng sai"""
-    print(f"\nCÂU {idx+1}:")
-    print(textwrap.fill(qinfo["q"], width=70))
-    for choice in qinfo["choices"]:
-        print("   " + choice)
-    while True:
-        user = input("Đáp án của bạn (A/B/C/D): ").strip().upper()
-        if user in {"A", "B", "C", "D"}:
-            break
-        print(" >> Vui lòng nhập A, B, C hoặc D!")
-    return user == qinfo["ans"]
+def solve_cubic(a, b, c, d):
+    """
+    Giải phương trình bậc 3: ax^3 + bx^2 + cx + d = 0
+    Sử dụng NumPy để tìm nghiệm.
+    """
+    if a == 0:
+        print("Lỗi: Đây không phải phương trình bậc 3 (a phải khác 0).")
+        return None
+    
+    # Đa thức hệ số: [a, b, c, d]
+    coefficients = [a, b, c, d]
+    
+    # Tìm nghiệm bằng NumPy
+    roots = np.roots(coefficients)
+    
+    return roots
 
 def main():
-    print("="*60)
-    print("        MINI IQ QUIZ – 10 CÂU HỎI TRẮC NGHIỆM")
-    print("="*60)
-
-    # Trộn ngẫu nhiên để bài quiz mỗi lần khác nhau (tuỳ chọn)
-    random.shuffle(questions)
-
-    score = 0
-    for idx, qinfo in enumerate(questions):
-        if ask_question(idx, qinfo):
-            print(" ✓ Chính xác!\n")
-            score += 1
-        else:
-            print(f" ✗ Sai. Đáp án đúng: {qinfo['ans']}\n")
-
-    print("="*60)
-    print(f"Hoàn thành! Bạn trả lời đúng {score}/10.")
-    percent = score * 10
-    print(f"Điểm: {percent}%")
-    if percent == 100:
-        print("Xuất sắc! 🏆")
-    elif percent >= 80:
-        print("Rất tốt! 👏")
-    elif percent >= 60:
-        print("Tạm ổn, luyện thêm nhé! 🙂")
-    else:
-        print("Cố gắng lần sau! 💪")
-    print("="*60)
+    print("Chương trình giải phương trình bậc 3: ax³ + bx² + cx + d = 0")
+    print("Nhập các hệ số (a, b, c, d). Lưu ý: a phải khác 0.")
+    
+    try:
+        a = float(input("Nhập a: "))
+        b = float(input("Nhập b: "))
+        c = float(input("Nhập c: "))
+        d = float(input("Nhập d: "))
+        
+        roots = solve_cubic(a, b, c, d)
+        
+        if roots is not None:
+            print("\nCác nghiệm của phương trình là:")
+            for i, root in enumerate(roots, 1):
+                # Hiển thị nghiệm thực hoặc phức
+                if np.isreal(root):
+                    print(f"Nghiệm {i}: {root.real:.4f} (thực)")
+                else:
+                    print(f"Nghiệm {i}: {root:.4f} (phức)")
+            
+            # Kiểm tra và hiển thị số nghiệm thực
+            real_roots = [r for r in roots if np.isreal(r)]
+            print(f"\nSố nghiệm thực: {len(real_roots)}")
+    
+    except ValueError:
+        print("Lỗi: Vui lòng nhập số hợp lệ.")
 
 if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        sys.exit("\n\nĐã thoát bài quiz.")
+    main()
